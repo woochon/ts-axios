@@ -21,8 +21,16 @@ export interface AxiosReponse {
   headers:any
   config:AxiosRequestConfig
   request:any
+  timeout?:number
 }
 
 export interface AxiosPromise extends Promise<AxiosReponse>{
+}
 
+export interface AxiosError extends Error{
+  isAxiosError:boolean
+  config:AxiosRequestConfig
+  code?:string | null
+  request?:any
+  response?:AxiosReponse
 }
