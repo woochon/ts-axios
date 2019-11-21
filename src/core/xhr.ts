@@ -13,7 +13,7 @@ export default function xhr(config:AxiosRequestConfig):AxiosPromise{
     if(timeout){
       request.timeout = timeout;
     }
-    request.open(method.toLocaleUpperCase(),url,true);
+    request.open(method.toLocaleUpperCase(),url!,true);
 
     request.onreadystatechange = function handleLoad(){
       if(request.readyState!==4){
