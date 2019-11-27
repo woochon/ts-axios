@@ -15,7 +15,7 @@ export interface  AxiosRequestConfig {
   timeout?:number
 }
 
-export interface AxiosReponse<T = any> {
+export interface AxiosResponse<T = any> {
   data:T
   status:number
   statusText:string
@@ -25,7 +25,7 @@ export interface AxiosReponse<T = any> {
   timeout?:number
 }
 
-export interface AxiosPromise < T =any >extends Promise<AxiosReponse<T>>{
+export interface AxiosPromise < T =any >extends Promise<AxiosResponse<T>>{
 }
 
 export interface AxiosError extends Error{
@@ -33,11 +33,16 @@ export interface AxiosError extends Error{
   config:AxiosRequestConfig
   code?:string | null
   request?:any
-  response?:AxiosReponse
+  response?:AxiosResponse
 }
 
 
 export interface Axios{
+  interceptors:{
+    request:AxiosInterceptorManager<AxiosRequestConfig>
+    response:AxiosInterceptorManager<AxiosResponse>
+  }
+
   request<T = any>(config:AxiosRequestConfig):AxiosPromise<T>
 
   get<T = any>(url:string,config?:AxiosRequestConfig):AxiosPromise<T>
@@ -58,4 +63,17 @@ export interface Axios{
 export interface AxiosInstance extends Axios{
   <T = any>(config:AxiosRequestConfig):AxiosPromise<T>
   <T = any>(url:string,config:AxiosRequestConfig):AxiosPromise<T>
+}
+
+export interface AxiosInterceptorManager<T>{
+  use(resolved:ResolvedFn<T>,rejected?:RejectedFn):number
+  eject(id:number):void
+}
+
+export interface ResolvedFn<T>{
+  (val:T):T | Promise<T>
+}
+
+export interface RejectedFn{
+  (error:any):any
 }
