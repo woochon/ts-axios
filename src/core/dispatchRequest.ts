@@ -6,6 +6,7 @@ import xhr from './xhr';
 import transform from "./transform";
 
 export default function dispatchRequest(config:AxiosRequestConfig):AxiosPromise {
+  throwIfCancellationRequested(config);
   processConfig(config);
   config.headers = transformHeaders(config);
   return xhr(config).then((res)=>{
@@ -36,4 +37,10 @@ function transformHeaders(config:AxiosRequestConfig):any{
 function transformResponseData(data:AxiosResponse):AxiosResponse{
   data.data = transform(data.data,data.headers,data.config.transformResponse);
   return data;
+}
+
+function throwIfCancellationRequested(config:AxiosRequestConfig):void{
+  if(config.cancelToken){
+    config.cancelToken.throwIfRequested();
+  }
 }
