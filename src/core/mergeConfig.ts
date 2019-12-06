@@ -29,7 +29,7 @@ stratKeysFromVal2.forEach(key=>{
   strats[key] = fromVal2Strat;
 });
 
-const stratKyesDeepMerge = ['headers'];
+const stratKyesDeepMerge = ['headers','auth'];
 stratKyesDeepMerge.forEach(key=>{
   strats[key] = deepMergeStrat;
 });

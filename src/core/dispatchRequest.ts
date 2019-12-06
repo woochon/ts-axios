@@ -4,6 +4,7 @@ import {transformRequest} from "../helpers/data";
 import {flattenHeaders, processHeaders} from "../helpers/headers";
 import xhr from './xhr';
 import transform from "./transform";
+import {combineURL, isAbsoluteURL} from "../helpers/utils";
 
 export default function dispatchRequest(config:AxiosRequestConfig):AxiosPromise {
   throwIfCancellationRequested(config);
@@ -20,9 +21,12 @@ function processConfig(config:AxiosRequestConfig):void{
   config.headers = flattenHeaders(config.headers,config.method!)
 }
 
-function transformURL(config:AxiosRequestConfig):string{
-  const { url,params } = config;
-  return buildURL(url!,params);
+export function transformURL(config:AxiosRequestConfig):string{
+  let { url,params,paramsSerializer,baseURL } = config;
+  if(baseURL&& isAbsoluteURL(url!)){
+    url = combineURL(baseURL,url!);
+  }
+  return buildURL(url!,params,paramsSerializer);
 }
 
 function transRequestData(config:AxiosRequestConfig):any{
